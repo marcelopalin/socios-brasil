@@ -15,6 +15,7 @@ from decimal import Decimal
 from io import TextIOWrapper
 from pathlib import Path
 from zipfile import ZipFile
+import os
 
 import rows
 from rows.fields import slug
@@ -194,11 +195,11 @@ def transform_socio(row):
         row["nome_representante_legal"] = None
         row["codigo_qualificacao_representante_legal"] = None
 
-    if row["cnpj_cpf_do_socio"] == "000***000000**":
-        row["cnpj_cpf_do_socio"] = ""
+    if row["cnpjcpf_do_socio"] == "000***000000**":
+        row["cnpjcpf_do_socio"] = ""
 
     if row["identificador_de_socio"] == 2:  # Pessoa Física
-        row["cnpj_cpf_do_socio"] = row["cnpj_cpf_do_socio"][-11:]
+        row["cnpjcpf_do_socio"] = row["cnpjcpf_do_socio"][-11:]
 
     # TODO: convert percentual_capital_social
 
@@ -293,6 +294,11 @@ def extract_files(
     for filename in filenames:
         # TODO: use another strategy to open this file (like using rows'
         # open_compressed when archive support is implemented)
+        if os.path.isdir(filename):
+            continue
+        if not str(filename).endswith('.zip'):
+            continue
+
         zf = ZipFile(filename)
         inner_filenames = zf.filelist
         assert (
