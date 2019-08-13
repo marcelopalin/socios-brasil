@@ -15,3 +15,5 @@ dist/*
 download.sh
 data/*
 reg_settings.py
+venv
+venv/*
