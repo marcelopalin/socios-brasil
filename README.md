@@ -214,6 +214,9 @@ comandos (não esqueça de preencher a variável `POSTGRESQL_URI` corretamente):
 
 ```bash
 POSTGRESQL_URI="postgres://<user>:<pass>@<host>:<port>/<dbname>"  # PREENCHA!
+
+POSTGRESQL_URI="postgres://ampere:vh3mqxi@localhost:5432/empresas"
+
 rows pgimport --schema=schema/empresa.csv data/output/empresa.csv.gz $POSTGRESQL_URI empresa
 rows pgimport --schema=schema/socio.csv data/output/empresa-socia.csv.gz $POSTGRESQL_URI empresa_socia
 rows pgimport --schema=schema/socio.csv data/output/socio.csv.gz $POSTGRESQL_URI socio
