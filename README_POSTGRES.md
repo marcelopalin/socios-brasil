@@ -279,3 +279,125 @@ postgres=# \du
 postgres=# 
 
 
+# BACKUP
+
+
+```bash
+pg_dump --username postgres --host localhost Modelos | gzip -c > modelos.sql.gz
+```
+
+# RESTAURAR LINUX
+
+Logue-se:
+
+```bash
+sudo -u postgres psql
+```
+
+Crie o BD
+
+Logue-se:
+
+```bash
+drop database "Modelos";
+create database "Modelos";
+```
+
+```bash
+gunzip -c modelos.sql.gz | psql -U ampere -h localhost -d "Modelos"
+```
+
+## Desconectando usuários para fazer DROP
+
+Logue-se:
+
+```bash
+sudo -u postgres psql
+```
+
+Então execute:
+```bash
+SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'modelos';
+```
+
+E depois:
+
+```bash
+drop database modelos;
+```
+
+## RESTAURANDO O BD
+
+Logue-se:
+
+```bash
+sudo -u postgres psql
+```
+
+Crie o BD
+
+Logue-se:
+
+```bash
+create database "Modelos";
+```
+
+Deve ser entre Aspas para ele respeitar a Maiúscula.
+
+Vá até o diretório onde se encontra o arquivo .sql.gz e
+execute:
+
+```bash
+gunzip -c modelos.sql.gz | psql -U ampere -h localhost -d "Modelos"
+```
+
+## Linux Restaurando com pg_restore
+
+pg_restore -c -i -U ampere -d Modelos -v "/tmp/modelos.tar" -W
+
+-c to clean the database
+-i to ignore any database version checks
+-U to force a user
+-d to select the database
+-v verbose mode, don't know why
+"$$" the location of the files to import in tmp to get around permission issues
+-W to force asking for the password to the user (postgres)
+
+
+## RESTAURANDO O BD NO WINDOWS
+
+1) Use a tecla do Windows para buscar pela palavra SQL e aparecerá o terminal do POSTGRES. 
+
+Depois vá teclando Enter e digite a senha do usuário postgres.
+
+Então utilize os comandos básicos:
+
+### DROP
+
+```bash
+drop database modelos;
+```
+Se tiver usuário logado execute este primeiro e depois o drop:
+
+```bash
+SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'Modelos';
+```
+
+## CREATE
+
+create database 'Modelos';
+
+## RESTAURE
+
+Abra o prompt do DOS e digite (supondo que abriu o prompt no mesmo diretório do arquivo horizon.sql):
+
+```bash
+psql -U ampere -h localhost -d "Modelos" -f modelos.sql
+```
+
+ou se o arquivo estiver em algum outro diretório,
+No prompt do DOS (digite):
+
+```bash
+psql -U ampere -h localhost -d "Modelos" -f C:/dev/modelos.sql
+```
