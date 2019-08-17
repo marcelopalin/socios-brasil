@@ -2,7 +2,7 @@
 
 SCHEMA_PATH="schema"
 OUTPUT_PATH="data/output"
-POSTGRESQL_URI="postgres://ampere:vh3mqxi@localhost:5432/empresa"
+POSTGRESQL_URI="postgres://<user>:<pass>@localhost:5432/<db_name>"
 
 time rows pgimport --schema="$SCHEMA_PATH/empresa.csv" "$OUTPUT_PATH/empresa.csv.gz" "$POSTGRESQL_URI" empresa
 time rows pgimport --schema="$SCHEMA_PATH/socio.csv" "$OUTPUT_PATH/socio.csv.gz" "$POSTGRESQL_URI" socio
