@@ -237,3 +237,30 @@ Em R:
 Em Python:
 
 - [CNPJ-full](https://github.com/fabioserpa/CNPJ-full)
+
+
+# POSTGRESQL
+
+Crie o usuário de sua preferência
+
+Logue-se inicialmente como:
+
+```
+sudo psql postgres
+```
+
+```
+CREATE ROLE <nome_user> WITH LOGIN PASSWORD 'senha';
+```
+
+Crie o BD:
+
+```
+CREATE DATABASE "empresas_brasil_db";
+```
+
+```
+GRANT ALL PRIVILEGES ON DATABASE "empresas_brasil_db" TO <nome_user>;
+```
+
+

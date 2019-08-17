@@ -84,12 +84,16 @@ psql (PostgreSQL) 11.4 (Ubuntu 11.4-1.pgdg18.10+1)
 
 ```bash
 sudo systemctl status postgresql.service
+ou 
+sudo service postgresql status
 ```
 
 Reiniciar o serviço do POSTGRESQL
 
 ```bash
 sudo systemctl restart postgresql
+ou
+sudo service postgresql restart
 ```
 
 
@@ -123,6 +127,13 @@ Para começar, abra um prompt do PostgreSQL como seu superusuário do postgres:
 ```
 sudo -u postgres psql
 ```
+
+Obs: depois que configurar um usuário, a forma de se logar passa a ser:
+
+```
+psql -U mpi -h localhost -d postgres
+```
+passando o usuário, host e database
 
  O Postgres funciona muito bem para se tornar utilizável desde o início sem ter que fazer nada. Por padrão, ele cria automaticamente o usuário postgres. Vamos começar usando o psql utilitário, que é um utilitário instalado com o Postgres, que permite executar funções administrativas sem precisar conhecer seus comandos SQL reais.
 
@@ -210,7 +221,7 @@ Criando o usuário **mpi**
 
 ```
 sudo -u postgres psql
-postgres=# CREATE ROLE mpi WITH LOGIN PASSWORD 'seupass';
+postgres=# CREATE ROLE mpi WITH LOGIN PASSWORD 'vh3mqxi';
 ```
 Espere! A lista de atributos para o usuário está completamente vazia. Por quê?
 
@@ -226,16 +237,10 @@ postgres=# \q # quit
 
 # 8. LOGIN COM NOVO USUÁRIO
 
-```
-psql postgres -U mpi
-```
-
+Conectando o usuário no BD postgres padrão.
 
 ```
-sudo -u postgres createuser --interactive
-[sudo] senha para user:
-Digite o nome da role a ser adicionada: ampere
-A nova role poderá criar um super-usuário? (s/n) s
+psql -U mpi -h localhost postgres
 ```
 
 

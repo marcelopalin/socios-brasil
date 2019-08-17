@@ -5,7 +5,6 @@ OUTPUT_PATH="data/output"
 POSTGRESQL_URI="postgres://ampere:vh3mqxi@localhost:5432/empresa"
 
 time rows pgimport --schema="$SCHEMA_PATH/empresa.csv" "$OUTPUT_PATH/empresa.csv.gz" "$POSTGRESQL_URI" empresa
-time rows pgimport --schema="$SCHEMA_PATH/socio.csv" "$OUTPUT_PATH/empresa-socia.csv.gz" "$POSTGRESQL_URI" empresa_socia
 time rows pgimport --schema="$SCHEMA_PATH/socio.csv" "$OUTPUT_PATH/socio.csv.gz" "$POSTGRESQL_URI" socio
 time rows pgimport --schema="$SCHEMA_PATH/cnae-secundaria.csv" "$OUTPUT_PATH/cnae-secundaria.csv.gz" "$POSTGRESQL_URI" cnae_secundaria
 
