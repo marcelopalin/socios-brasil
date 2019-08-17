@@ -153,6 +153,16 @@ pode ser feito mais rapidamente. Para executar o script baixando os dados do
 
 ## Importando em Bancos de Dados
 
+Resumo:
+
+Configure a linha
+
+POSTGRESQL_URI="postgres://<user>:<pass>@localhost:5432/<db_name>"
+
+do script import-postgresql_all.sh e então rode ele depois
+de ter configurado o BD e usuário do Postgres (seções finais)
+
+
 Depois de executar o script ou baixar os dados já convertidos, o ideal é
 importá-los em um banco de dados para facilitar consultas. Com a [interface de
 linha de comando da rows](http://turicas.info/rows/cli/) é possível importá-los
@@ -264,3 +274,9 @@ GRANT ALL PRIVILEGES ON DATABASE "empresas_brasil_db" TO <nome_user>;
 ```
 
 
+Configure a linha:
+
+POSTGRESQL_URI="postgres://<user>:<pass>@localhost:5432/<db_name>"
+
+do script import-postgresql_all.sh e então rode ele depois
+de ter configurado o BD e usuário do Postgres.
