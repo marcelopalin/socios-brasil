@@ -1,4 +1,4 @@
-# 1. INSTALAÇÃO
+# 1. INSTALAÇÃO DO POSTGRES
 
 
 Execute:
@@ -221,7 +221,7 @@ Criando o usuário **mpi**
 
 ```
 sudo -u postgres psql
-postgres=# CREATE ROLE mpi WITH LOGIN PASSWORD 'vh3mqxi';
+postgres=# CREATE ROLE mpi WITH LOGIN PASSWORD 'senha';
 ```
 Espere! A lista de atributos para o usuário está completamente vazia. Por quê?
 
