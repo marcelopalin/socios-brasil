@@ -221,7 +221,9 @@ Criando o usuário **mpi**
 
 ```
 sudo -u postgres psql
-postgres=# CREATE ROLE mpi WITH LOGIN PASSWORD 'senha';
+
+postgres=# CREATE ROLE mpi WITH LOGIN PASSWORD '123456';
+
 ```
 Espere! A lista de atributos para o usuário está completamente vazia. Por quê?
 
