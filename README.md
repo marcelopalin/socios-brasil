@@ -1,6 +1,8 @@
-# Sócios de Empresas Brasileiras
+# OBJETIVO
 
-Script que baixa todos os dados de sócios das empresas brasileiras [disponíveis
+Este projeto é um clone da versão https://github.com/turicas/socios-brasil. Fiz algumas adaptações ao excelente projeto deles.
+
+Como está explicado no projeto deles o objetivo é rodar Scripts que baixam todos os dados de sócios das empresas brasileiras [disponíveis
 no site da Receita
 Federal](https://receita.economia.gov.br/orientacao/tributaria/cadastros/cadastro-nacional-de-pessoas-juridicas-cnpj/dados-publicos-cnpj),
 extrai, limpa e converte para CSV. [Veja mais
@@ -18,46 +20,22 @@ Justen/[Brasil.IO](https://brasil.io/)**. Caso compartilhe os dados, **utilize
 a mesma licença**.
 
 
-## Dados
-
-### Entrada
-
-Os dados publicados pela Receita Federal do Brasil contemplam as seguintes
-tabelas:
-
-- Cadastro das empresas, incluindo CNPJ, razão social, nome fantasia, endereço,
-  CNAE fiscal e outros;
-- Cadastro de sócios, contendo CNPJ da empresa, documento do sócio, nome do
-  sócio e outros;
-- CNAEs secundários para cada CNPJ.
-
-Os dados originalmente estão em um formato [fixed-width
-file](http://www.softinterface.com/Convert-XLS/Features/Fixed-Width-Text-File-Definition.htm)
-e cada linha possui um tipo diferente de registro (empresa, sócio, CNAE
-secundária, header ou trailler), que dificulta qualquer tipo de análise, sendo
-necessária a conversão para formatos mais amigáveis.
-
-O campo de qualificação do sócio foi definido com base [na tabela
-disponibilizada pela Receita
-Federal](http://idg.receita.fazenda.gov.br/orientacao/tributaria/cadastros/cadastro-nacional-de-pessoas-juridicas-cnpj/Qualificacao_socio.pdf)
-e está disponível no arquivo
-[`qualificacao-socio.csv`](qualificacao-socio.csv). Em breve também teremos
-arquivos com os nomes dos CNAEs e situação cadastral ([veja mais detalhes
-aqui](https://github.com/turicas/socios-brasil/issues/20)).
-
-
-### Saída
-
-Além de extrair os dados do arquivo origingal, o script gera uma nova tabela
-contendo as empresas que são sócias de outras empresas (para facilitar buscas
-de *holdings*).
-
-Caso você não queira/possa rodar o script, **[acesse diretamente os dados
-convertidos no Brasil.IO](https://brasil.io/dataset/socios-brasil)**.
+# AVISO
 
 Se esse programa e/ou os dados resultantes foram úteis a você ou à sua empresa,
 considere [fazer uma doação ao projeto Brasil.IO](https://brasil.io/doe), que é
 mantido voluntariamente.
+
+
+# NA PRÁTICA
+
+Todas as informações com maiores detalhes poderão ser encontrados em https://github.com/turicas/socios-brasil. O foco aqui é instruir como executar o projeto e obter no final um BD em SQLite ou PostgreSQL.
+
+
+# ADAPTAÇÃO 01
+
+Quebrei o script bash 
+
 
 Como resultado temos os seguintes arquivos:
 
