@@ -34,10 +34,10 @@ Todas as informações com maiores detalhes poderão ser encontrados em https://
 
 # ADAPTAÇÃO 01
 
-Quebrei o script bash 
+Quebrei o script bash em vários scripts para termos maior controle.
 
-
-Como resultado temos os seguintes arquivos:
+Como resultado na pasta **data/output** teremos os seguintes arquivos
+após rodarmos os scripts (.sh):
 
 - `empresa.csv.gz`: cadastro das empresas;
 - `socio.csv.gz`: cadastro dos sócios;
@@ -72,24 +72,16 @@ dados censurados são:
   "ddd_telefone_2", "descricao_tipo_logradouro", "logradouro", "numero" terão
   seus valores em branco e na razão social não constará o CPF do dono.
 
+> ATENÇÃO:
+
 Caso queira rodar o script sem o modo censura, altere o `run.sh` e adicione a
 opção `--no_censorship` na linha do `extract_dump.py`.
 
-
-### Dados auxiliares
-
-Foi criado um spider que baixa os metadados das [atividades empresariais
-(CNAEs) do site do IBGE](https://cnae.ibge.gov.br). Para rodá-lo, execute:
-
-```bash
-./run-cnae.sh
-```
-
-O script baixará os dados para as versões 1.0, 1.1, 2.0, 2.1, 2.2 e 2.3 e
-salvará em `data/output`.
+> Já acrescentei tanto no script **run-origina.sh** quanto no script **02_run_extract_to_output.sh**
 
 
-## Rodando
+
+## PREPARANDO
 
 ### Instalando as Dependências
 
@@ -101,67 +93,20 @@ instale as bibliotecas executando:
 pip install -r requirements.txt
 ```
 
-### Executando
+### MODO DE EXECUÇÃO COMPLETA - 1 SCRIPT APENAS
 
-Então basta executar o script `run.sh` para baixar os arquivos necessários e
+Então basta executar o script `run-original.sh` para baixar os arquivos necessários e
 fazer as conversões:
 
 ```bash
-./run.sh
+./run-original.sh
 ```
 
-Você poderá rodar etapas separadamente também (leia o script [run.sh](run.sh)
-para mais detalhes).
-
-#### Agilizando o Download
-
-[O servidor da Receita Federal onde os dados estão hospedados é **muito
-lento**](https://twitter.com/turicas/status/1114185311372873729) e, por isso, o
-[Brasil.IO](https://brasil.io/) disponibiliza um *mirror* de onde o download
-pode ser feito mais rapidamente. Para executar o script baixando os dados do
-*mirror*, execute:
-
-```bash
-./run.sh --use-mirror
-```
-
-> Nota: os *mirrors* do Brasil.IO ainda estão em fase de testes e não é
-> garantido que estejam sempre atualizados.
+No final você terá os arquivos .Zip na pasta data/downloads e os arquivos .csv.gz na pasta data/output.
 
 
-## Importando em Bancos de Dados
 
-Resumo:
-
-Configure a linha
-
-POSTGRESQL_URI="postgres://<user>:<pass>@localhost:5432/<db_name>"
-
-do script import-postgresql_all.sh e então rode ele depois
-de ter configurado o BD e usuário do Postgres (seções finais)
-
-
-Depois de executar o script ou baixar os dados já convertidos, o ideal é
-importá-los em um banco de dados para facilitar consultas. Com a [interface de
-linha de comando da rows](http://turicas.info/rows/cli/) é possível importá-los
-rapidamente em bancos SQLite e PostgreSQL.
-
-> Nota 1: depois de importar os dados em um banco de dados é recomendável a
-> criação de índices para agilizar as consultas. Um índice bem comum é na
-> coluna `cnpj` (de todas as tabelas), para facilitar encontrar uma determinada
-> empresa, seus sócios e CNAEs secundários através do CNPJ. Exemplo:
-> `CREATE INDEX IF NOT EXISTS idx_empresa_cnpj ON empresa (cnpj);`. Veja o
-> arquivo [sql/create-indexes.sql](sql/create-indexes.sql) para uma lista de
-> índices sugeridos; veja também os outros arquivos da pasta `sql/` para
-> criação de tabelas auxiliares, chaves primárias e estrangeiras e o arquivo
-> `import-postgresql.sh` para automatizar o processo de importação e criação
-> dos índices.
-
-> Nota 2: caso utilize a opção `--no_censorship`, utilize os arquivos da pasta
-> `schema-full` em vez da pasta `schema`, pois a versão "sem censura" possui
-> mais colunas.
-
-### SQLite
+# GERANDO O SQLITE em data/output/socios-brasil.sqlite
 
 Instale a CLI da rows e a versão de desenvolvimento da biblioteca rodando
 (requer Python 3.7+):
@@ -171,88 +116,24 @@ pip install rows[cli]
 pip install -U https://github.com/turicas/rows/archive/develop.zip
 ```
 
-Agora, com os arquivos na pasta `data/output` basta executar os seguintes
-comandos:
+Lembrando que você deve ter criado o ambiente virtual do python:
 
 ```bash
+virtualenv -p python3 venv
+source venv/bin/activate
+pip3 install -r requirements.txt
+```
+
+Dentro da pasta do projeto **socios-brasil** rode:
+
+```ini
 DB_NAME="data/output/socios-brasil.sqlite"
-rows csv2sqlite --schemas=schema/empresa.csv data/output/empresa.csv.gz "$DB_NAME"
-rows csv2sqlite --schemas=schema/socio.csv data/output/empresa-socia.csv.gz "$DB_NAME"
-rows csv2sqlite --schemas=schema/socio.csv data/output/socio.csv.gz "$DB_NAME"
-rows csv2sqlite --schemas=schema/cnae-secundaria.csv data/output/cnae-secundaria.csv.gz "$DB_NAME"
+rows csv2sqlite --schemas=schema-full/empresa.csv data/output/empresa.csv.gz "$DB_NAME"
+rows csv2sqlite --schemas=schema-full/socio.csv data/output/socio.csv.gz "$DB_NAME"
+rows csv2sqlite --schemas=schema-full/socio.csv data/output/empresa-socia.csv.gz "$DB_NAME"
+rows csv2sqlite --schemas=schema-full/cnae-secundaria.csv data/output/cnae-secundaria.csv.gz "$DB_NAME"
 ```
 
 Pegue um café, aguarde alguns minutos e depois desfrute do banco de dados em
 `data/output/socios-brasil.sqlite`. :)
 
-
-### PostgreSQL
-
-Instale a CLI da rows, as dependências do PostgreSQL e a versão de
-desenvolvimento da biblioteca rodando (requer Python 3.7+):
-
-```bash
-pip install rows[cli]
-pip install rows[postgresql]
-pip install -U https://github.com/turicas/rows/archive/develop.zip
-```
-
-Agora, com os arquivos na pasta `data/output` basta executar os seguintes
-comandos (não esqueça de preencher a variável `POSTGRESQL_URI` corretamente):
-
-```bash
-POSTGRESQL_URI="postgres://<user>:<pass>@<host>:<port>/<dbname>"  # PREENCHA COM USUÁRIO SENHA E NOME DO BD!
-
-rows pgimport --schema=schema/empresa.csv data/output/empresa.csv.gz $POSTGRESQL_URI empresa
-rows pgimport --schema=schema/socio.csv data/output/empresa-socia.csv.gz $POSTGRESQL_URI empresa_socia
-rows pgimport --schema=schema/socio.csv data/output/socio.csv.gz $POSTGRESQL_URI socio
-rows pgimport --schema=schema/cnae-secundaria.csv data/output/cnae-secundaria.csv.gz $POSTGRESQL_URI cnae_secundaria
-```
-
-Pegue um café, aguarde alguns minutos e depois desfrute do banco de dados em
-`$POSTGRESQL_URI`. :)
-
-
-## Outras Implementações
-
-Em R:
-
-- [qsacnpj](https://github.com/georgevbsantiago/qsacnpj/)
-- [RFBCNPJ](http://curso-r.com/blog/2018/05/13/2018-05-13-rfbcnpj/)
-
-Em Python:
-
-- [CNPJ-full](https://github.com/fabioserpa/CNPJ-full)
-
-
-# POSTGRESQL
-
-Crie o usuário de sua preferência
-
-Logue-se inicialmente como:
-
-```
-sudo psql postgres
-```
-
-```
-CREATE ROLE <nome_user> WITH LOGIN PASSWORD 'senha';
-```
-
-Crie o BD:
-
-```
-CREATE DATABASE "empresas_brasil_db";
-```
-
-```
-GRANT ALL PRIVILEGES ON DATABASE "empresas_brasil_db" TO <nome_user>;
-```
-
-
-Configure a linha:
-
-POSTGRESQL_URI="postgres://<user>:<pass>@localhost:5432/<db_name>"
-
-do script import-postgresql_all.sh e então rode ele depois
-de ter configurado o BD e usuário do Postgres.

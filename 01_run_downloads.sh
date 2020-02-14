@@ -2,16 +2,21 @@
 
 set -e
 
+echo "Criando os diretórios: data/download data/output"
 mkdir -p data/download data/output
+
+echo "Baixando os arquivos .zip para data/download com 8 conexões!"
 
 if [ "$1" = "--use-mirror" ]; then
 	USE_MIRROR=true
+	echo "BAIXANDO DO MIRROR: https://data.brasil.io/mirror/socios-brasil!"
 else
 	USE_MIRROR=false
+	echo "BAIXANDO DIRETO DA RECEITA FEDERAL!"
 fi
 
 function download_data() {
-	CONNECTIONS=4
+	CONNECTIONS=8
 	DOWNLOAD_URL="https://receita.economia.gov.br/orientacao/tributaria/cadastros/cadastro-nacional-de-pessoas-juridicas-cnpj/dados-publicos-cnpj"
 	FILE_URLS=$(wget --quiet --no-check-certificate -O - "$DOWNLOAD_URL" \
 		| grep --color=no DADOS_ABERTOS_CNPJ \
@@ -28,30 +33,6 @@ function download_data() {
 	done
 }
 
-function extract_data() {
-	time python extract_dump.py data/output/ data/download/DADOS_ABERTOS_CNPJ*.zip --no_censorship
-}
-
-function extract_holdings() {
-	time python extract_holdings.py data/output/socio.csv.gz data/output/empresa-socia.csv.gz
-}
-
-function extract_cnae() {
-	for versao in "1.0" "1.1" "2.0" "2.1" "2.2" "2.3"; do
-		filename="data/output/cnae-$versao.csv"
-		rm -rf "$filename"
-		time scrapy runspider \
-			-s RETRY_HTTP_CODES="500,503,504,400,404,408" \
-			-s HTTPCACHE_ENABLED=true \
-			--loglevel=INFO \
-			-a versao="$versao" \
-			-o "$filename" \
-			cnae.py
-		gzip "$filename"
-	done
-}
-
+# Chamando o metodo
 download_data
-extract_data
-extract_holdings
-extract_cnae
+echo "DOWNLOAD FINALIZADO!"
