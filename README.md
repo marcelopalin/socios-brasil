@@ -1,4 +1,4 @@
-# OBJETIVO
+# 1. OBJETIVO
 
 Este projeto é um clone da versão https://github.com/turicas/socios-brasil. Fiz algumas adaptações ao excelente projeto deles.
 
@@ -8,7 +8,7 @@ Federal](https://receita.economia.gov.br/orientacao/tributaria/cadastros/cadastr
 extrai, limpa e converte para CSV. [Veja mais
 detalhes](http://dados.gov.br/noticia/governo-federal-disponibiliza-os-dados-abertos-do-cadastro-nacional-da-pessoa-juridica).
 
-## Licença
+## 1.1. Licença
 
 A licença do código é [LGPL3](https://www.gnu.org/licenses/lgpl-3.0.en.html) e
 dos dados convertidos [Creative Commons Attribution
@@ -18,17 +18,17 @@ Federal do Brasil, dados tratados por Álvaro
 Justen/[Brasil.IO](https://brasil.io/)**. Caso compartilhe os dados, **utilize
 a mesma licença**.
 
-# AVISO
+# 2. AVISO
 
 Se esse programa e/ou os dados resultantes foram úteis a você ou à sua empresa,
 considere [fazer uma doação ao projeto Brasil.IO](https://brasil.io/doe), que é
 mantido voluntariamente.
 
-# NA PRÁTICA
+# 3. NA PRÁTICA
 
 Todas as informações com maiores detalhes poderão ser encontrados em https://github.com/turicas/socios-brasil. O foco aqui é instruir como executar o projeto e obter no final um BD em SQLite ou PostgreSQL.
 
-# ADAPTAÇÃO 01
+# 4. ADAPTAÇÃO 01
 
 Quebrei o script bash em vários scripts para termos maior controle.
 
@@ -54,7 +54,7 @@ abaixo).
 > Nota 2: a codificação de caracteres original é ISO-8859-15, mas o script gera
 > os arquivos CSV em UTF-8.
 
-### Privacidade
+### 4.0.1. Privacidade
 
 Para garantir a privacidade, evitar SPAM e publicar apenas dados corretos, o
 script deleta/limpa algumas colunas com informações sensíveis. Essa será a
@@ -75,9 +75,9 @@ opção `--no_censorship` na linha do `extract_dump.py`.
 
 > Já acrescentei tanto no script **run-origina.sh** quanto no script **02_run_extract_to_output.sh**
 
-## PREPARANDO
+## 4.1. PREPARANDO
 
-### Instalando as Dependências
+### 4.1.1. Instalando as Dependências
 
 Esse script depende de Python 3.7, de algumas bibliotecas e do software
 [aria2](https://aria2.github.io/). Depois de instalar o Python 3.7 e o aria2,
@@ -87,7 +87,7 @@ instale as bibliotecas executando:
 pip install -r requirements.txt
 ```
 
-### MODO DE EXECUÇÃO COMPLETA - 1 SCRIPT APENAS
+### 4.1.2. MODO DE EXECUÇÃO COMPLETA - 1 SCRIPT APENAS
 
 Então basta executar o script `run-original.sh` para baixar os arquivos necessários e
 fazer as conversões:
@@ -199,7 +199,7 @@ drwxr-xr-x 4 mpi mpi 4,0K fev 12 23:25 ..
 
 O maior CSV é o empresa.csv.gz com 3 G e o BD Sqlite final fica com 13G.
 
-# GERANDO O SQLITE em data/output/socios-brasil.sqlite
+# 5. GERANDO O SQLITE em data/output/socios-brasil.sqlite
 
 Instale a CLI da rows e a versão de desenvolvimento da biblioteca rodando
 (requer Python 3.7+):
